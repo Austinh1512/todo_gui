@@ -1,15 +1,18 @@
 import FreeSimpleGUI as sg
 import json
 
+#Retrieve initial todos
 with open("todos.json", "r") as f:
     data = json.load(f)
     todos = data["todos"]
 
+#Define constants
 BTN_SIZE = (7, 1)
 LISTBOX_VALUES = [todo["text"] for todo in todos]
 
 sg.theme("DarkBlue13")
 
+#Define layouts
 listbox_column_layout = [
     [sg.Listbox(values=LISTBOX_VALUES, key="-TODOS_LIST-", size=50, expand_y=True, horizontal_scroll=True)]
 ]
@@ -33,13 +36,14 @@ layout = [
 
 window = sg.Window("Todo App", layout)
 
+#Event loop
 while True:
     event, values = window.read()
     if event in (sg.WIN_CLOSED, "Cancel"): break
     print(event, values)
     match event:
         case "-ADD_TODO_BTN-":
-            window["-TODOS_LIST-"].update([values["-ADD_TODO-"]] + window["-TODOS_LIST-"].get_list_values())
+            window["-TODOS_LIST-"].update(window["-TODOS_LIST-"].get_list_values() + [values["-ADD_TODO-"]])
             window["-ADD_TODO-"].update("")
             
 
