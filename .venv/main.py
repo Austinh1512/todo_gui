@@ -1,11 +1,17 @@
 import FreeSimpleGUI as sg
+import json
+
+with open("todos.json", "r") as f:
+    data = json.load(f)
+    todos = data["todos"]
 
 BTN_SIZE = (7, 1)
+LISTBOX_VALUES = [todo["text"] for todo in todos]
 
 sg.theme("DarkBlue13")
 
 listbox_column_layout = [
-    [sg.Listbox(values=[], key="-TODOS_LIST-", size=50, expand_y=True, horizontal_scroll=True)]
+    [sg.Listbox(values=LISTBOX_VALUES, key="-TODOS_LIST-", size=50, expand_y=True, horizontal_scroll=True)]
 ]
 
 buttons_column_layout = [
