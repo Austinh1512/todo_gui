@@ -8,7 +8,7 @@ with open("todos.json", "r") as f:
 
 #Define constants
 BTN_SIZE = (7, 1)
-LISTBOX_VALUES = [todo["text"] for todo in todos]
+LISTBOX_VALUES = [todo["task"] for todo in todos]
 
 sg.theme("DarkBlue13")
 
@@ -45,7 +45,12 @@ while True:
         case "-ADD_TODO_BTN-":
             window["-TODOS_LIST-"].update(window["-TODOS_LIST-"].get_list_values() + [values["-ADD_TODO-"]])
             window["-ADD_TODO-"].update("")
-            
+            todos.append({"task": values["-ADD_TODO-"], "completed": False})
+
+#Write changes to json file
+new_todos = { "todos": todos}
+with open("todos.json", "w") as f:
+    json.dump(new_todos, f, indent=4)
 
 window.close()
 
