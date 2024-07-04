@@ -46,6 +46,9 @@ while True:
             window["-TODOS_LIST-"].update(window["-TODOS_LIST-"].get_list_values() + [values["-ADD_TODO-"]])
             window["-ADD_TODO-"].update("")
             todos.append({"task": values["-ADD_TODO-"], "completed": False})
+        case "-DELETE_TODO_BTN-":
+            todos = [todo for todo in todos if todo["task"] != values["-TODOS_LIST-"][0]]
+            window["-TODOS_LIST-"].update([todo["task"] for todo in todos])
 
 #Write changes to json file
 new_todos = { "todos": todos}
