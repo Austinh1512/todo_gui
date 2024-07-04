@@ -5,7 +5,7 @@ BTN_SIZE = (7, 1)
 sg.theme("DarkBlue13")
 
 listbox_column_layout = [
-    [sg.Listbox(values=[], key="-TODOS_LIST-", expand_x=True, expand_y=True, horizontal_scroll=True)]
+    [sg.Listbox(values=[], key="-TODOS_LIST-", size=50, expand_y=True, horizontal_scroll=True)]
 ]
 
 buttons_column_layout = [
