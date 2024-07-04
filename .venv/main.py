@@ -5,7 +5,7 @@ BTN_SIZE = (7, 1)
 sg.theme("DarkBlue13")
 
 listbox_column_layout = [
-    [sg.Listbox(values=[], key="-TODOS_LIST-", expand_x=True, expand_y=True)]
+    [sg.Listbox(values=[], key="-TODOS_LIST-", expand_x=True, expand_y=True, horizontal_scroll=True)]
 ]
 
 buttons_column_layout = [
@@ -31,6 +31,11 @@ while True:
     event, values = window.read()
     if event in (sg.WIN_CLOSED, "Cancel"): break
     print(event, values)
+    match event:
+        case "-ADD_TODO_BTN-":
+            window["-TODOS_LIST-"].update([values["-ADD_TODO-"]] + window["-TODOS_LIST-"].get_list_values())
+            window["-ADD_TODO-"].update("")
+            
 
 window.close()
 
