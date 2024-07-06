@@ -8,16 +8,15 @@ with open("todos.json", "r") as f:
 
 #Define constants
 BTN_SIZE = (7, 1)
-LISTBOX_VALUES = [todo["task"] for todo in todos]
+ACTIVE_TODOS = [todo["task"] for todo in todos if todo["completed"] == False]
+COMPLETED_TODOS = [todo["task"] for todo in todos if todo["completed"] == True]
 
 sg.theme("DarkBlue13")
 
 #Define layouts
-active_todos_tab = sg.Tab(title="Active", layout=[[sg.Listbox(values=LISTBOX_VALUES, key="-ACTIVE_TODOS_LIST-", size=(50, 10), horizontal_scroll=True)]], key="-ACTIVE_TAB")
+active_todos_tab = sg.Tab(title="Active", layout=[[sg.Listbox(values=ACTIVE_TODOS, key="-ACTIVE_TODOS_LIST-", size=(50, 10), horizontal_scroll=True)]], key="-ACTIVE_TAB")
 
-
-completed_todos_tab = sg.Tab(title="Completed", layout=[[sg.Listbox(values=[], key="-COMPLETED_TODOS_LIST-", size=(50, 10), horizontal_scroll=True)]], key="-COMPLETED_TAB")
-
+completed_todos_tab = sg.Tab(title="Completed", layout=[[sg.Listbox(values=COMPLETED_TODOS, key="-COMPLETED_TODOS_LIST-", size=(50, 10), horizontal_scroll=True)]], key="-COMPLETED_TAB")
 
 todos_tab_group = sg.TabGroup([[active_todos_tab, completed_todos_tab]])
 
@@ -30,7 +29,6 @@ buttons_column_layout = [
 frame_layout = [
     [sg.Column([[todos_tab_group]]), sg.Column(buttons_column_layout)]
 ]
-
 
 layout = [
     [sg.InputText(key="-ADD_TODO-", tooltip="Add a task"), sg.Button("Add", key="-ADD_TODO_BTN-", size=BTN_SIZE)],
@@ -53,6 +51,12 @@ while True:
         case "-DELETE_TODO_BTN-":
             todos = [todo for todo in todos if todo["task"] != values["-ACTIVE_TODOS_LIST-"][0]]
             window["-ACTIVE_TODOS_LIST-"].update([todo["task"] for todo in todos])
+        case "-COMPLETE_TODO_BTN-":
+            for todo in todos:
+                if todo["task"] == values["-ACTIVE_TODOS_LIST-"][0]:
+                    todo["completed"] = True
+            window["-ACTIVE_TODOS_LIST-"].update([todo["task"] for todo in todos if todo["task"] != values["-ACTIVE_TODOS_LIST-"][0] and todo["completed"] == False])
+            window["-COMPLETED_TODOS_LIST-"].update(window["-COMPLETED_TODOS_LIST-"].get_list_values() + values["-ACTIVE_TODOS_LIST-"])
 
 
 #Write changes to json file
