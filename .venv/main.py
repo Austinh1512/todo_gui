@@ -49,8 +49,9 @@ while True:
             window["-ADD_TODO-"].update("")
             todos.append({"task": values["-ADD_TODO-"], "completed": False})
         case "-DELETE_TODO_BTN-":
-            todos = [todo for todo in todos if todo["task"] != values["-ACTIVE_TODOS_LIST-"][0]]
-            window["-ACTIVE_TODOS_LIST-"].update([todo["task"] for todo in todos])
+            list_key = "-ACTIVE_TODOS_LIST-" if len(values["-ACTIVE_TODOS_LIST-"]) else "-COMPLETED_TODOS_LIST-"
+            todos = [todo for todo in todos if todo["task"] != values[list_key][0]]
+            window[list_key].update([todo for todo in window[list_key].get_list_values() if todo != values[list_key][0]])
         case "-COMPLETE_TODO_BTN-":
             for todo in todos:
                 if todo["task"] == values["-ACTIVE_TODOS_LIST-"][0]:
