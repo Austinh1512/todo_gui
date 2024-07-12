@@ -42,10 +42,11 @@ layout = [
 
 window = sg.Window("Todo App", layout)
 
-#Event loop
+# Event loop
 while True:
     event, values = window.read()
-    if event in (sg.WIN_CLOSED, "Cancel"): break
+    if event in (sg.WIN_CLOSED, "Cancel"):
+        break
     print(event, values)
     match event:
         case "-ADD_TODO_BTN-":
@@ -54,19 +55,25 @@ while True:
             window["-ADD_TODO-"].update("")
             todos.append({"task": values["-ADD_TODO-"], "completed": False})
         case "-DELETE_TODO_BTN-":
-            list_key = "-ACTIVE_TODOS_LIST-" if len(values["-ACTIVE_TODOS_LIST-"]) else "-COMPLETED_TODOS_LIST-"
-            todos = [todo for todo in todos if todo["task"] != values[list_key][0]]
-            window[list_key].update(
-                [todo for todo in window[list_key].get_list_values() if todo != values[list_key][0]])
+            try:
+                list_key = "-ACTIVE_TODOS_LIST-" if len(values["-ACTIVE_TODOS_LIST-"]) else "-COMPLETED_TODOS_LIST-"
+                todos = [todo for todo in todos if todo["task"] != values[list_key][0]]
+                window[list_key].update(
+                    [todo for todo in window[list_key].get_list_values() if todo != values[list_key][0]])
+            except IndexError:
+                sg.popup_error("No task selected to delete.", title="Error")
         case "-COMPLETE_TODO_BTN-":
-            for todo in todos:
-                if todo["task"] == values["-ACTIVE_TODOS_LIST-"][0]:
-                    todo["completed"] = True
-            window["-ACTIVE_TODOS_LIST-"].update([todo["task"] for todo in todos if
-                                                  todo["task"] != values["-ACTIVE_TODOS_LIST-"][0] and todo[
-                                                      "completed"] is False])
-            window["-COMPLETED_TODOS_LIST-"].update(
-                window["-COMPLETED_TODOS_LIST-"].get_list_values() + values["-ACTIVE_TODOS_LIST-"])
+            try:
+                for todo in todos:
+                    if todo["task"] == values["-ACTIVE_TODOS_LIST-"][0]:
+                        todo["completed"] = True
+                window["-ACTIVE_TODOS_LIST-"].update([todo["task"] for todo in todos if
+                                                      todo["task"] != values["-ACTIVE_TODOS_LIST-"][0] and todo[
+                                                          "completed"] is False])
+                window["-COMPLETED_TODOS_LIST-"].update(
+                    window["-COMPLETED_TODOS_LIST-"].get_list_values() + values["-ACTIVE_TODOS_LIST-"])
+            except IndexError:
+                sg.popup_error("No task selected to complete.", title="Error")
         case "-EDIT_TODO_BTN-":
             try:
                 selected_task = values["-ACTIVE_TODOS_LIST-"][0]
