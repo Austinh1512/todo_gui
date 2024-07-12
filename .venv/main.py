@@ -8,6 +8,7 @@ with open("todos.json", "r") as f:
 
 # Define constants
 BTN_SIZE = (7, 1)
+ICON_SIZE = (50, 30)
 ACTIVE_TODOS = [todo["task"] for todo in todos if todo["completed"] is False]
 COMPLETED_TODOS = [todo["task"] for todo in todos if todo["completed"] is True]
 
@@ -25,9 +26,12 @@ completed_todos_tab = sg.Tab(title="Completed", layout=[
 todos_tab_group = sg.TabGroup([[active_todos_tab, completed_todos_tab]], key="-SELECTED_TAB-")
 
 buttons_column_layout = [
-    [sg.Button("Complete", key="-COMPLETE_TODO_BTN-", size=BTN_SIZE)],
-    [sg.Button("Edit", key="-EDIT_TODO_BTN-", size=BTN_SIZE)],
-    [sg.Button("Delete", key="-DELETE_TODO_BTN-", size=BTN_SIZE)]
+    [sg.Button(image_source="icons/checked.png", image_size=ICON_SIZE, key="-COMPLETE_TODO_BTN-",
+               tooltip="Complete Task"), ],
+    [sg.Button(image_source="icons/editing.png", image_size=ICON_SIZE, key="-EDIT_TODO_BTN-",
+               tooltip="Edit Task")],
+    [sg.Button(image_source="icons/trash-can.png", image_size=ICON_SIZE, key="-DELETE_TODO_BTN-",
+               tooltip="Delete Task")]
 ]
 
 frame_layout = [
@@ -35,7 +39,8 @@ frame_layout = [
 ]
 
 layout = [
-    [sg.InputText(key="-ADD_TODO-", tooltip="Add a task"), sg.Button("Add", key="-ADD_TODO_BTN-", size=BTN_SIZE)],
+    [sg.InputText(key="-ADD_TODO-"), sg.Button(image_source="icons/plus.png", image_size=(30, 25), image_subsample=2,
+                                               key="-ADD_TODO_BTN-", tooltip="Add Task", size=(100, 100))],
     [sg.Frame("To-Dos", frame_layout, key="-TODO_FRAME-")],
     [sg.Button("Cancel", size=BTN_SIZE)]
 ]
