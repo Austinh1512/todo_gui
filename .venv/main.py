@@ -50,6 +50,8 @@ while True:
     print(event, values)
     match event:
         case "-ADD_TODO_BTN-":
+            if not values["-ADD_TODO-"]:
+                sg.popup("There's no task to add.")
             window["-ACTIVE_TODOS_LIST-"].update(
                 window["-ACTIVE_TODOS_LIST-"].get_list_values() + [values["-ADD_TODO-"]])
             window["-ADD_TODO-"].update("")
